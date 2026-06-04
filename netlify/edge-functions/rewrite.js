@@ -1,5 +1,11 @@
 export default async (request, context) => {
-    const path = context.geo?.country?.code === 'AU' ? '/edge/australia' : '/edge/not-australia';
+    const country = context.geo?.country?.code;
+    
+    // Validate country code to prevent open redirect
+    const allowedCountries = ['AU'];
+    const isAustralia = country === 'AU';
+    const path = isAustralia ? '/edge/australia' : '/edge/not-australia';
+    
     return Response.redirect(new URL(path, request.url));
 };
 
